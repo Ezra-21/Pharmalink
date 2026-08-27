@@ -30,6 +30,15 @@
   --color-stock-low: #d97706;
   --color-stock-out: #64748b;
   --color-status-error: var(--color-error);
+  /* Tinted pill backgrounds paired with the stock-status colors above, for
+   * the dot+label badge pattern (Page 7 rule, used first on the landing
+   * page's example result card). */
+  --color-stock-in-bg: #e3f5ea;
+  --color-stock-low-bg: #fdf1e2;
+
+  /* A muted alt-surface for full-width bands (footer, tinted sections) that
+   * need to read as distinct from both the canvas and white cards. */
+  --color-surface-muted: #eef0ec;
 }
 
 @theme inline {
@@ -72,6 +81,9 @@
     --color-error: #e5776c;
     --color-error-bg: #3a211e;
     --color-focus: #4fb49c;
+    --color-stock-in-bg: #16321f;
+    --color-stock-low-bg: #3a2a14;
+    --color-surface-muted: #202423;
   }
 }
 
@@ -90,6 +102,9 @@
   --color-error: #e5776c;
   --color-error-bg: #3a211e;
   --color-focus: #4fb49c;
+  --color-stock-in-bg: #16321f;
+  --color-stock-low-bg: #3a2a14;
+  --color-surface-muted: #202423;
 }
 
 body {

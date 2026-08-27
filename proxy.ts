@@ -14,7 +14,13 @@ const SESSION_COOKIE = "pharmalink_session";
 const ROLE_COOKIE = "pharmalink_role";
 
 const AUTH_ROUTES = ["/login", "/signup", "/forgot-password"];
-const PATIENT_ROUTES = ["/home", "/search", "/pharmacy", "/medicine"];
+/**
+ * Only truly personal routes require a session. Search and the pharmacy/
+ * medicine detail pages are intentionally public — the landing page's hero
+ * search and Pages 6/7's "also serves anonymous search" requirement
+ * (prd.md §7.1) both depend on browsing working with no account.
+ */
+const PATIENT_ROUTES = ["/home"];
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
