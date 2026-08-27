@@ -18,14 +18,14 @@ export const am: Dictionary = {
   auth: {
     loginTitle: "ግባ",
     loginSubtitle: "ወደ ፋርማሊንክ እንኳን ደህና መጡ",
-    identifierLabel: "ስልክ ወይም ኢሜይል",
+    identifierLabel: "ኢሜይል አድራሻ",
     passwordLabel: "የይለፍ ቃል",
     loginButton: "ግባ",
     forgotPassword: "የይለፍ ቃል ረሱ?",
     noAccount: "አካውንት የለዎትም?",
     signUp: "ይመዝገቡ",
     tooManyAttempts: "በጣም ብዙ ሙከራዎች። እባክዎ ቆይተው ይሞክሩ።",
-    invalidCredentials: "የተሳሳተ ስልክ/ኢሜይል ወይም የይለፍ ቃል።",
+    invalidCredentials: "የተሳሳተ ኢሜይል ወይም የይለፍ ቃል።",
   },
   home: {
     greeting: "ሰላም",

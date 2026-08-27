@@ -2,7 +2,7 @@ import { apiRequest } from "@/lib/api/client";
 import type { User } from "@/lib/types/user";
 
 export interface LoginPayload {
-  identifier: string; // phone or email, per Page 1 login.md
+  email: string; // email only — Login does not accept phone number, per Page 1 PRD
   password: string;
 }
 

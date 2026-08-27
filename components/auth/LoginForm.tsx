@@ -12,7 +12,7 @@ import { useAuth } from "@/hooks/useAuth";
  */
 export function LoginForm() {
   const { login } = useAuth();
-  const [identifier, setIdentifier] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -22,9 +22,9 @@ export function LoginForm() {
     setError(null);
     setIsSubmitting(true);
     try {
-      await login({ identifier, password });
+      await login({ email, password });
     } catch {
-      setError("Incorrect phone/email or password.");
+      setError("The email or password is incorrect. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -33,10 +33,11 @@ export function LoginForm() {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       <Input
-        id="identifier"
-        label="Phone or email"
-        value={identifier}
-        onChange={(e) => setIdentifier(e.target.value)}
+        id="email"
+        label="Email address"
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
         autoComplete="username"
         required
       />

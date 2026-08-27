@@ -15,14 +15,14 @@ export const en = {
   auth: {
     loginTitle: "Log in",
     loginSubtitle: "Welcome back to PharmaLink",
-    identifierLabel: "Phone or email",
+    identifierLabel: "Email address",
     passwordLabel: "Password",
     loginButton: "Log in",
     forgotPassword: "Forgot password?",
     noAccount: "Don't have an account?",
     signUp: "Sign up",
     tooManyAttempts: "Too many attempts. Please try again later.",
-    invalidCredentials: "Incorrect phone/email or password.",
+    invalidCredentials: "The email or password is incorrect. Please try again.",
   },
   home: {
     greeting: "Hello",
