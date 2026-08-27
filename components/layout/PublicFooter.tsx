@@ -2,8 +2,12 @@
 
 import { useTranslation } from "@/lib/i18n/useTranslation";
 
-/** Extracted from Figma node 17:1083, "Footer". */
-export function LandingFooter() {
+/**
+ * Shared footer for every public page — landing, and now the registration
+ * pages too. Originally built for the landing page (Figma node 17:1083),
+ * promoted alongside PublicHeader once a second page needed it.
+ */
+export function PublicFooter() {
   const { t } = useTranslation();
   const year = new Date().getFullYear();
 

@@ -4,7 +4,7 @@ import { LandingHero } from "@/components/landing/LandingHero";
 import { LandingTrustStrip } from "@/components/landing/LandingTrustStrip";
 import { LandingHowItWorks } from "@/components/landing/LandingHowItWorks";
 import { LandingForPharmacies } from "@/components/landing/LandingForPharmacies";
-import { LandingFooter } from "@/components/landing/LandingFooter";
+import { PublicFooter } from "@/components/layout/PublicFooter";
 
 export const metadata: Metadata = {
   title: "PharmaLink — Find which pharmacy has your medicine in Ethiopia",
@@ -33,7 +33,7 @@ export default function LandingPage() {
         <LandingHowItWorks />
         <LandingForPharmacies />
       </main>
-      <LandingFooter />
+      <PublicFooter />
     </div>
   );
 }
