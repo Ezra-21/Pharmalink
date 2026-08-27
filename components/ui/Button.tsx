@@ -7,19 +7,20 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantClasses: Record<Variant, string> = {
-  primary: "bg-blue-600 text-white hover:bg-blue-700",
-  secondary: "bg-zinc-100 text-zinc-900 hover:bg-zinc-200",
-  ghost: "bg-transparent text-blue-600 hover:bg-blue-50",
+  primary: "bg-[var(--color-brand)] text-white hover:bg-[var(--color-brand-hover)]",
+  secondary:
+    "border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-primary)] hover:bg-[var(--color-canvas)]",
+  ghost: "bg-transparent text-[var(--color-brand)] hover:bg-[var(--color-brand)]/10",
 };
 
 /**
- * Placeholder styling — final colors/radii lock in once Page 1 (Login)
- * is implemented against its Figma design.
+ * PharmaLink primary UI button — flat, 10px radius, brand green, locked in
+ * from Page 1 (Login). Reused as-is across all future pages.
  */
 export function Button({ variant = "primary", className = "", ...props }: ButtonProps) {
   return (
     <button
-      className={`inline-flex items-center justify-center rounded-lg px-4 py-2.5 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${variantClasses[variant]} ${className}`}
+      className={`inline-flex h-12 items-center justify-center rounded-[var(--radius-button)] px-4 text-base font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-focus)]/40 disabled:cursor-not-allowed disabled:opacity-50 ${variantClasses[variant]} ${className}`}
       {...props}
     />
   );

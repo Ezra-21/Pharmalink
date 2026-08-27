@@ -1,26 +1,35 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f7f5f1;
+  --foreground: #1a1d1b;
 
   /*
-   * PharmaLink design tokens — PLACEHOLDER values only.
-   * These get finalized when Page 1 (Login) is implemented against its
-   * Figma design, since Login is explicitly where color/type/spacing
-   * "lock" for the rest of the product (see Page 1 — Login/login.md).
+   * PharmaLink design tokens — locked in from Page 1 (Login) Figma + PRD.
+   * These are the canonical light-mode tokens; every later page reuses them,
+   * so changes here ripple across the whole product's design system.
    */
-  --color-brand-primary: #2563eb;
-  --color-brand-primary-hover: #1d4ed8;
+  --color-brand: #2e6b5e;
+  --color-brand-hover: #245549;
+  --color-canvas: #f7f5f1;
+  --color-surface: #ffffff;
+  --color-border: #e7e3dc;
+  --color-text-primary: #1a1d1b;
+  --color-text-secondary: #6b726e;
+  --color-text-placeholder: #9aa09c;
+  --color-error: #c4433a;
+  --color-error-bg: #fbeae8;
+  --color-focus: #3e8b79;
+
+  --radius-input: 8px;
+  --radius-button: 10px;
+  --radius-card: 16px;
 
   /* Stock-status colors (Page 7 rule): red is reserved for errors only. */
   --color-stock-in: #16a34a;
   --color-stock-low: #d97706;
   --color-stock-out: #64748b;
-  --color-status-error: #dc2626;
-
-  --radius-card: 0.75rem;
-  --radius-control: 0.5rem;
+  --color-status-error: var(--color-error);
 }
 
 @theme inline {
@@ -29,23 +38,83 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 
-  --color-brand-primary: var(--color-brand-primary);
-  --color-brand-primary-hover: var(--color-brand-primary-hover);
+  --color-brand-primary: var(--color-brand);
+  --color-brand-primary-hover: var(--color-brand-hover);
   --color-stock-in: var(--color-stock-in);
   --color-stock-low: var(--color-stock-low);
   --color-stock-out: var(--color-stock-out);
   --color-status-error: var(--color-status-error);
 }
 
+/*
+ * Dark-mode equivalents. Applied two ways, both pointing at the same values:
+ *  1. System preference (prefers-color-scheme), for users who haven't made
+ *     an explicit in-app choice yet — skipped if they've explicitly picked
+ *     light via the ThemeToggle (:not([data-theme="light"])).
+ *  2. Explicit [data-theme="dark"] attribute, set by ThemeToggle/ThemeContext,
+ *     so a manual choice always wins regardless of system preference.
+ * Not a blind inversion: brand green, error red, and focus teal are all
+ * re-tuned to stay legible and keep the same brand feel on dark surfaces.
+ */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  :root:not([data-theme="light"]) {
+    --background: #14171a;
+    --foreground: #f1efea;
+
+    --color-brand: #3e9c86;
+    --color-brand-hover: #368873;
+    --color-canvas: #14171a;
+    --color-surface: #1d2120;
+    --color-border: #2b302d;
+    --color-text-primary: #f1efea;
+    --color-text-secondary: #a6aca7;
+    --color-text-placeholder: #6e756f;
+    --color-error: #e5776c;
+    --color-error-bg: #3a211e;
+    --color-focus: #4fb49c;
   }
 }
 
+:root[data-theme="dark"] {
+  --background: #14171a;
+  --foreground: #f1efea;
+
+  --color-brand: #3e9c86;
+  --color-brand-hover: #368873;
+  --color-canvas: #14171a;
+  --color-surface: #1d2120;
+  --color-border: #2b302d;
+  --color-text-primary: #f1efea;
+  --color-text-secondary: #a6aca7;
+  --color-text-placeholder: #6e756f;
+  --color-error: #e5776c;
+  --color-error-bg: #3a211e;
+  --color-focus: #4fb49c;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-canvas);
+  color: var(--color-text-primary);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+/*
+ * ThemeToggle renders both icons and lets CSS pick one, so the server and
+ * client render identical markup (no hydration mismatch) while the correct
+ * icon still shows on first paint.
+ */
+.theme-icon-light {
+  display: block;
+}
+
+.theme-icon-dark {
+  display: none;
+}
+
+:root[data-theme="dark"] .theme-icon-light {
+  display: none;
+}
+
+:root[data-theme="dark"] .theme-icon-dark {
+  display: block;
 }
