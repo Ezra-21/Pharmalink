@@ -1,0 +1,43 @@
+import type { Pharmacy } from "@/lib/types/pharmacy";
+
+export const mockPharmacies: Pharmacy[] = [
+  {
+    id: "pharm_1",
+    name: "Bole Medico Pharmacy",
+    address: "Bole Road, Addis Ababa",
+    lat: 8.9931,
+    lng: 38.7892,
+    phone: "+251911000001",
+    hours: "08:00 - 21:00",
+    ownerId: "owner_1",
+    verifiedStatus: "verified",
+    distanceKm: 1.2,
+    isOpenNow: true,
+  },
+  {
+    id: "pharm_2",
+    name: "Sunrise Pharmacy",
+    address: "Kazanchis, Addis Ababa",
+    lat: 9.0129,
+    lng: 38.7614,
+    phone: "+251911000002",
+    hours: "07:00 - 22:00",
+    ownerId: "owner_2",
+    verifiedStatus: "verified",
+    distanceKm: 1.8,
+    isOpenNow: true,
+  },
+  {
+    id: "pharm_3",
+    name: "Kenema Pharmacy",
+    address: "Megenagna, Addis Ababa",
+    lat: 9.0198,
+    lng: 38.8017,
+    phone: "+251911000003",
+    hours: "08:00 - 20:00",
+    ownerId: "owner_3",
+    verifiedStatus: "verified",
+    distanceKm: 2.3,
+    isOpenNow: true,
+  },
+];
