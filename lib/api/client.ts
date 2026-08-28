@@ -22,15 +22,16 @@ interface RequestOptions extends Omit<RequestInit, "body"> {
 
 export async function apiRequest<T>(path: string, options: RequestOptions = {}): Promise<T> {
   const { body, headers, ...rest } = options;
+  // FormData (file uploads — Page 4's license/permit documents) must not be
+  // JSON-stringified, and must NOT get an explicit Content-Type: the browser
+  // sets one itself with the correct multipart boundary.
+  const isFormData = typeof FormData !== "undefined" && body instanceof FormData;
 
   const response = await fetch(`${API_BASE_URL}${path}`, {
     ...rest,
     credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-      ...headers,
-    },
-    body: body !== undefined ? JSON.stringify(body) : undefined,
+    headers: isFormData ? headers : { "Content-Type": "application/json", ...headers },
+    body: isFormData ? body : body !== undefined ? JSON.stringify(body) : undefined,
   });
 
   if (!response.ok) {

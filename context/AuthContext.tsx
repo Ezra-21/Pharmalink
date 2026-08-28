@@ -7,14 +7,16 @@ import {
   login as loginRequest,
   logout as logoutRequest,
   signupPatient as signupPatientRequest,
+  signupPharmacyStaff as signupPharmacyStaffRequest,
 } from "@/lib/api/auth";
-import type { LoginPayload, SignupPatientPayload } from "@/lib/api/auth";
+import type { LoginPayload, SignupPatientPayload, SignupPharmacyStaffPayload } from "@/lib/api/auth";
 
 export interface AuthContextValue {
   user: User | null;
   isLoading: boolean;
   login: (payload: LoginPayload) => Promise<User>;
   signupPatient: (payload: SignupPatientPayload) => Promise<User>;
+  signupPharmacyStaff: (payload: SignupPharmacyStaffPayload) => Promise<User>;
   logout: () => Promise<void>;
   refresh: () => Promise<void>;
 }
@@ -53,13 +55,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return newUser;
   }, []);
 
+  // Does NOT redirect anywhere on success (unlike signupPatient) — Page 4's
+  // PRD is explicit that this is a "pending review" state shown in place on
+  // this same page, not a dashboard redirect (there's no dashboard access
+  // until an admin approves the pharmacy).
+  const signupPharmacyStaff = useCallback(async (payload: SignupPharmacyStaffPayload) => {
+    const newUser = await signupPharmacyStaffRequest(payload);
+    setUser(newUser);
+    return newUser;
+  }, []);
+
   const logout = useCallback(async () => {
     await logoutRequest();
     setUser(null);
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, signupPatient, logout, refresh }}>
+    <AuthContext.Provider
+      value={{ user, isLoading, login, signupPatient, signupPharmacyStaff, logout, refresh }}
+    >
       {children}
     </AuthContext.Provider>
   );

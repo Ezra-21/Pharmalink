@@ -19,7 +19,19 @@ export interface SignupPharmacyStaffPayload {
   phone: string;
   email: string;
   password: string;
+  preferredLanguage: "en" | "am";
   pharmacyName: string;
+  address: string;
+  pharmacyPhone: string;
+  /** Matches the Figma field exactly (a license/registration number the
+   * pharmacy already has) — not a Pharmacy.id (those are backend-generated).
+   * Needs a real backend field to land in; not present in main prd.md §8 today. */
+  pharmacyId: string;
+  /** License/permit document(s) — see the data-model gap flagged in
+   * `Page 4 — Pharmacy Staff Registration/pharmacy-staff-registration.md`:
+   * §8's Pharmacy entity has no documents field yet, so the exact field
+   * name/shape the Go backend expects for these files is unconfirmed. */
+  documents: File[];
 }
 
 /**
@@ -36,7 +48,21 @@ export async function signupPatient(payload: SignupPatientPayload): Promise<User
 }
 
 export async function signupPharmacyStaff(payload: SignupPharmacyStaffPayload): Promise<User> {
-  return apiRequest<User>("/auth/signup/pharmacy-staff", { method: "POST", body: payload });
+  // FormData, not JSON, since this submission includes files — apiRequest
+  // detects FormData and skips JSON-encoding it.
+  const formData = new FormData();
+  formData.append("name", payload.name);
+  formData.append("phone", payload.phone);
+  formData.append("email", payload.email);
+  formData.append("password", payload.password);
+  formData.append("preferredLanguage", payload.preferredLanguage);
+  formData.append("pharmacyName", payload.pharmacyName);
+  formData.append("address", payload.address);
+  formData.append("pharmacyPhone", payload.pharmacyPhone);
+  formData.append("pharmacyId", payload.pharmacyId);
+  payload.documents.forEach((file) => formData.append("documents", file));
+
+  return apiRequest<User>("/auth/signup/pharmacy-staff", { method: "POST", body: formData });
 }
 
 export async function requestPasswordReset(identifier: string): Promise<void> {

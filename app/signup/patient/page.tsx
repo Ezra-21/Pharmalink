@@ -27,11 +27,9 @@ export default function PatientRegistrationPage() {
       <PublicHeader />
 
       <main className="flex flex-1 flex-col lg:flex-row">
-        <div className="hidden lg:block lg:w-[45%]">
-          <AuthBrandPanel imageSrc="/pharma1.png" appName={t.common.appName} tagline={t.signup.brandTagline} />
-        </div>
+        <AuthBrandPanel imageSrc="/pharma1.png" appName={t.common.appName} tagline={t.signup.brandTagline} />
 
-        <div className="flex flex-1 flex-col items-center justify-center bg-[var(--color-canvas)] px-5 py-10 sm:px-6 lg:w-[55%] lg:px-12">
+        <div className="flex flex-1 flex-col items-center justify-center bg-[var(--color-canvas)] px-5 py-10 sm:px-6 lg:px-12">
           <div className="w-full max-w-[500px] sm:rounded-[var(--radius-card)] sm:border sm:border-[var(--color-border)] sm:bg-[var(--color-surface)] sm:p-8">
             <div className="mb-6 flex items-center justify-between">
               <Link

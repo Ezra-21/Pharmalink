@@ -12,11 +12,7 @@ import { useOnlineStatus } from "@/hooks/useOnlineStatus";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useTranslation } from "@/lib/i18n/useTranslation";
 import { ApiError } from "@/lib/api/client";
-
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-// Ethiopian mobile numbers: 09xxxxxxxx (10 digits) or +2519xxxxxxxx.
-const PHONE_REGEX = /^(?:\+2519\d{8}|09\d{8})$/;
-const MIN_PASSWORD_LENGTH = 8;
+import { EMAIL_REGEX, MOBILE_PHONE_REGEX, MIN_PASSWORD_LENGTH } from "@/lib/validation";
 
 // Same "store codes, not resolved strings" pattern as LoginForm, so errors
 // re-translate immediately on a language switch instead of sticking.
@@ -73,7 +69,7 @@ export function PatientRegistrationForm() {
 
   function validatePhone(value: string): PhoneErrorCode | undefined {
     if (!value.trim()) return "empty";
-    if (!PHONE_REGEX.test(value.trim())) return "invalid";
+    if (!MOBILE_PHONE_REGEX.test(value.trim())) return "invalid";
     return undefined;
   }
 
