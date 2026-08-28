@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { LoginForm } from "@/components/auth/LoginForm";
-import { PlusIcon, ShieldIcon } from "@/components/ui/icons";
+import { BackArrowIcon, PlusIcon, ShieldIcon } from "@/components/ui/icons";
 import { useTranslation } from "@/lib/i18n/useTranslation";
 
 export default function LoginPage() {
@@ -10,7 +10,15 @@ export default function LoginPage() {
 
   return (
     <main className="flex flex-1 flex-col items-center bg-[var(--color-canvas)] px-5 pb-6 sm:px-6 sm:pb-10">
-      <div className="mt-6 w-full max-w-[420px] sm:mt-8 sm:rounded-[var(--radius-card)] sm:border sm:border-[var(--color-border)] sm:bg-[var(--color-surface)] sm:p-[41px]">
+      <div className="mt-6 w-full max-w-[520px] sm:mt-8 sm:rounded-[var(--radius-card)] sm:border sm:border-[var(--color-border)] sm:bg-[var(--color-surface)] sm:p-[41px]">
+        <Link
+          href="/"
+          aria-label={t.common.back}
+          className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-full text-[var(--color-text-primary)] transition-colors hover:bg-[var(--color-canvas)]"
+        >
+          <BackArrowIcon />
+        </Link>
+
         {/* Header: logo + brand, then welcome heading + subtitle */}
         <div className="flex w-full flex-col">
           <div className="mb-6 flex w-full items-center gap-3">
