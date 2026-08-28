@@ -53,27 +53,31 @@ export function AuthBrandPanel({
 
   return (
     <div className="hidden lg:block lg:w-[45%]">
-      <div
-        className="sticky w-full overflow-hidden"
-        style={{ top: headerHeight, height: `calc(100vh - ${headerHeight}px)` }}
-      >
-        <Image src={imageSrc} alt="" fill sizes="45vw" quality={100} className="object-cover" priority />
-        {tagline && (
-          <>
-            <div className="absolute inset-0 bg-[rgba(15,83,71,0.2)] mix-blend-multiply" aria-hidden="true" />
-            <div className="absolute inset-0 flex items-end bg-gradient-to-t from-black/40 to-transparent p-8">
-              <div className="flex max-w-[448px] flex-col gap-4 pb-6">
-                <div className="flex items-center gap-3">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-[8px] bg-white/20 backdrop-blur-[2px]">
-                    <PlusIcon />
-                  </span>
-                  <span className="text-2xl font-bold tracking-[-0.6px] text-white">{appName}</span>
+      {/* Sticky wrapper: pins the panel in the viewport as a long form
+          scrolls past it. next/image's `fill` needs its own immediate
+          `position: relative` ancestor (sticky doesn't count for Next's
+          validation), hence the extra nested div below rather than putting
+          both roles on one element. */}
+      <div className="sticky w-full" style={{ top: headerHeight, height: `calc(100vh - ${headerHeight}px)` }}>
+        <div className="relative h-full w-full overflow-hidden">
+          <Image src={imageSrc} alt="" fill sizes="45vw" quality={100} className="object-cover" priority />
+          {tagline && (
+            <>
+              <div className="absolute inset-0 bg-[rgba(15,83,71,0.2)] mix-blend-multiply" aria-hidden="true" />
+              <div className="absolute inset-0 flex items-end bg-gradient-to-t from-black/40 to-transparent p-8">
+                <div className="flex max-w-[448px] flex-col gap-4 pb-6">
+                  <div className="flex items-center gap-3">
+                    <span className="flex h-10 w-10 items-center justify-center rounded-[8px] bg-white/20 backdrop-blur-[2px]">
+                      <PlusIcon />
+                    </span>
+                    <span className="text-2xl font-bold tracking-[-0.6px] text-white">{appName}</span>
+                  </div>
+                  <p className="text-lg leading-7 text-white/90">{tagline}</p>
                 </div>
-                <p className="text-lg leading-7 text-white/90">{tagline}</p>
               </div>
-            </div>
-          </>
-        )}
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

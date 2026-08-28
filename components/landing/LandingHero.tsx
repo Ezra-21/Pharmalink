@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "@/lib/i18n/useTranslation";
-import { InfoCircleIcon, LocationPinIcon, SearchIcon } from "@/components/ui/icons";
+import { InfoCircleIcon, LocationPinIcon } from "@/components/ui/icons";
+import { SearchBar } from "@/components/search/SearchBar";
 
 /**
  * Hero section — extracted from Figma node 17:975 ("Main", Hero Section).
@@ -27,9 +28,8 @@ export function LandingHero() {
   const [query, setQuery] = useState("");
   const [showEmptyHint, setShowEmptyHint] = useState(false);
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const trimmed = query.trim();
+  function handleSubmit(value: string) {
+    const trimmed = value.trim();
     if (!trimmed) {
       setShowEmptyHint(true);
       return;
@@ -57,33 +57,18 @@ export function LandingHero() {
 
         <p className="max-w-[512px] text-base leading-6 text-[var(--color-text-secondary)]">{t.landing.heroSubtitle}</p>
 
-        <form onSubmit={handleSubmit} action="/search" method="GET" className="flex w-full max-w-[448px] flex-col items-center gap-4">
-          <div className="flex w-full flex-col gap-3 sm:flex-row">
-            <label htmlFor="hero-search" className="sr-only">
-              {t.landing.heroSearchLabel}
-            </label>
-            <div className="flex flex-1 items-center gap-2 rounded-[var(--radius-input)] border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3 text-left">
-              <SearchIcon className="shrink-0 text-[var(--color-text-secondary)]" />
-              <input
-                id="hero-search"
-                type="search"
-                name="q"
-                value={query}
-                onChange={(e) => {
-                  setQuery(e.target.value);
-                  if (showEmptyHint) setShowEmptyHint(false);
-                }}
-                placeholder={t.landing.heroSearchPlaceholder}
-                className="w-full bg-transparent text-base text-[var(--color-text-primary)] placeholder:text-[var(--color-text-placeholder)] focus:outline-none"
-              />
-            </div>
-            <button
-              type="submit"
-              className="inline-flex shrink-0 items-center justify-center rounded-[var(--radius-button)] bg-[var(--color-brand)] px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-[var(--color-brand-hover)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-focus)]/40"
-            >
-              {t.landing.heroSearchButton}
-            </button>
-          </div>
+        <div className="flex w-full max-w-[448px] flex-col items-center gap-4">
+          <SearchBar
+            value={query}
+            onChange={(value) => {
+              setQuery(value);
+              if (showEmptyHint) setShowEmptyHint(false);
+            }}
+            onSubmit={handleSubmit}
+            placeholder={t.landing.heroSearchPlaceholder}
+            label={t.landing.heroSearchLabel}
+            submitLabel={t.landing.heroSearchButton}
+          />
           {showEmptyHint && (
             <p className="text-sm text-[var(--color-error)]" role="alert">
               {t.landing.heroEmptyHint}
@@ -108,7 +93,7 @@ export function LandingHero() {
             <InfoCircleIcon className="text-[var(--color-text-secondary)]" />
             <span className="text-[13px] text-[var(--color-text-secondary)]">{t.landing.heroNoAccountNeeded}</span>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );

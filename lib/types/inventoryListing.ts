@@ -18,6 +18,6 @@ export interface InventoryListing {
 export interface PharmacyListingResult extends InventoryListing {
   pharmacy: Pick<
     import("./pharmacy").Pharmacy,
-    "id" | "name" | "distanceKm" | "isOpenNow"
+    "id" | "name" | "distanceKm" | "isOpenNow" | "lat" | "lng"
   >;
 }

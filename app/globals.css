@@ -25,16 +25,20 @@
   --radius-button: 10px;
   --radius-card: 16px;
 
-  /* Stock-status colors (Page 7 rule): red is reserved for errors only. */
-  --color-stock-in: #16a34a;
+  /* Stock-status colors, extracted from Page 7's actual Figma frame (node
+   * 6:519) — supersedes earlier approximations from the PRD text and the
+   * landing page's illustrative card. Red is reserved for errors only. */
+  --color-stock-in: #2e6b5e;
   --color-stock-low: #d97706;
-  --color-stock-out: #64748b;
+  --color-stock-out: #707976;
   --color-status-error: var(--color-error);
-  /* Tinted pill backgrounds paired with the stock-status colors above, for
-   * the dot+label badge pattern (Page 7 rule, used first on the landing
-   * page's example result card). */
-  --color-stock-in-bg: #e3f5ea;
-  --color-stock-low-bg: #fdf1e2;
+  /* Bordered-pill badge treatment (bg + border + text/icon), Page 7's exact spec. */
+  --color-stock-in-bg: #e6f4ea;
+  --color-stock-in-border: #a8dab5;
+  --color-stock-low-bg: #fef3c7;
+  --color-stock-low-border: #fde68a;
+  --color-stock-out-bg: #e7e9e5;
+  --color-stock-out-border: #bfc9c4;
 
   /* A muted alt-surface for full-width bands (footer, tinted sections) that
    * need to read as distinct from both the canvas and white cards. */
@@ -81,8 +85,15 @@
     --color-error: #e5776c;
     --color-error-bg: #3a211e;
     --color-focus: #4fb49c;
+    --color-stock-in: #4ade80;
     --color-stock-in-bg: #16321f;
+    --color-stock-in-border: #2d5a45;
+    --color-stock-low: #fbbf24;
     --color-stock-low-bg: #3a2a14;
+    --color-stock-low-border: #6b4a1a;
+    --color-stock-out: #9ca3a0;
+    --color-stock-out-bg: #2a2f2d;
+    --color-stock-out-border: #454b48;
     --color-surface-muted: #202423;
   }
 }
@@ -102,8 +113,15 @@
   --color-error: #e5776c;
   --color-error-bg: #3a211e;
   --color-focus: #4fb49c;
+  --color-stock-in: #4ade80;
   --color-stock-in-bg: #16321f;
+  --color-stock-in-border: #2d5a45;
+  --color-stock-low: #fbbf24;
   --color-stock-low-bg: #3a2a14;
+  --color-stock-low-border: #6b4a1a;
+  --color-stock-out: #9ca3a0;
+  --color-stock-out-bg: #2a2f2d;
+  --color-stock-out-border: #454b48;
   --color-surface-muted: #202423;
 }
 

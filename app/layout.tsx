@@ -34,7 +34,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       // that specific, expected mismatch is intentional.
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col">
+      {/*
+        suppressHydrationWarning here too: browser extensions like Grammarly
+        inject attributes (data-new-gr-c-s-check-loaded, data-gr-ext-installed)
+        onto <body> before React hydrates. That's an external, harmless
+        mismatch outside our control — not a bug in this app's code.
+      */}
+      <body className="min-h-full flex flex-col" suppressHydrationWarning>
         <Script
           id="pharmalink-theme-init"
           strategy="beforeInteractive"

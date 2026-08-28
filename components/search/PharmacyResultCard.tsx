@@ -2,8 +2,7 @@
 
 import type { PharmacyListingResult } from "@/lib/types/inventoryListing";
 import { Badge } from "@/components/ui/Badge";
-import { Card } from "@/components/ui/Card";
-import { DistanceIcon } from "@/components/ui/icons";
+import { DirectionsIcon, LocationPinIcon } from "@/components/ui/icons";
 import { useTranslation } from "@/lib/i18n/useTranslation";
 
 /**
@@ -20,40 +19,82 @@ function formatUpdatedAt(iso: string): string {
   return `${Math.floor(hours / 24)}d ago`;
 }
 
+/** Real Google Maps deep link — opens the phone's default maps app per
+ * main prd.md §6.2, rather than a placeholder/dead "Directions" button. */
+function directionsUrl(lat: number, lng: number): string {
+  return `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+}
+
 /**
- * Locked, reused listing card (Page 7): pharmacy name, stock badge, distance,
- * open/closed, price (or "Price not listed"), and last-updated freshness.
+ * Locked, reused listing card — extracted from Page 7's actual Figma frame
+ * (node 6:519): name + distance/open-closed row, stock badge + freshness
+ * row, and a right column with price + a real "Directions" link. Cards for
+ * pharmacies that are closed or out of stock are visually dimmed, matching
+ * the Figma's own opacity treatment on those exact cards.
  */
 export function PharmacyResultCard({ listing }: { listing: PharmacyListingResult }) {
   const { t } = useTranslation();
+  const { pharmacy } = listing;
+
+  const isFullyAvailable = listing.stockStatus === "in_stock" && pharmacy.isOpenNow;
+  const isOutOfStock = listing.stockStatus === "out_of_stock";
+  const cardOpacity = isOutOfStock ? "opacity-60" : !pharmacy.isOpenNow ? "opacity-80" : "";
+
+  const directionsClasses = isFullyAvailable
+    ? "bg-[var(--color-brand)] text-white hover:bg-[var(--color-brand-hover)]"
+    : isOutOfStock
+      ? "border border-[var(--color-border)] bg-[var(--color-canvas)] text-[var(--color-text-secondary)]"
+      : "border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-primary)] hover:bg-[var(--color-canvas)]";
 
   return (
-    <Card className="flex items-center justify-between gap-4">
-      <div>
-        <div className="flex items-center gap-2">
-          <p className="text-base font-semibold text-[var(--color-text-primary)]">{listing.pharmacy.name}</p>
-          <Badge status={listing.stockStatus} />
-        </div>
-        <div className="mt-1 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[13px] text-[var(--color-text-secondary)]">
-          {listing.pharmacy.distanceKm != null ? (
-            <span className="inline-flex items-center gap-1">
-              <DistanceIcon />
-              {listing.pharmacy.distanceKm} km away
+    <div
+      className={`flex items-start justify-between gap-4 rounded-[12px] border border-[var(--color-border)] bg-[var(--color-surface)] px-6 py-5 transition-opacity sm:px-[41px] sm:py-[21px] ${cardOpacity}`}
+    >
+      <div className="flex flex-col gap-1">
+        <p className="text-base font-semibold text-[var(--color-text-primary)]">{pharmacy.name}</p>
+
+        <div className="flex items-center gap-2 text-[13px]">
+          {pharmacy.distanceKm != null ? (
+            <span className="inline-flex items-center gap-1 text-[var(--color-text-secondary)]">
+              <LocationPinIcon />
+              {pharmacy.distanceKm} km
             </span>
           ) : (
-            <span>{t.search.distanceUnknown}</span>
+            <span className="text-[var(--color-text-secondary)]">{t.search.distanceUnknown}</span>
           )}
-          <span aria-hidden="true">·</span>
-          <span>{listing.pharmacy.isOpenNow ? t.search.openNow : t.search.closed}</span>
-          <span aria-hidden="true">·</span>
-          <span>
+          <span className="h-1 w-1 rounded-full bg-[var(--color-text-placeholder)]" aria-hidden="true" />
+          <span className={`font-medium ${pharmacy.isOpenNow ? "text-[var(--color-stock-in)]" : "text-[var(--color-error)]"}`}>
+            {pharmacy.isOpenNow ? t.search.openNow : t.search.closed}
+          </span>
+        </div>
+
+        <div className="mt-2 flex flex-wrap items-center gap-2">
+          <Badge status={listing.stockStatus} />
+          <span className="text-xs text-[var(--color-text-placeholder)] italic">
             {t.search.updated} {formatUpdatedAt(listing.updatedAt)}
           </span>
         </div>
       </div>
-      <p className="shrink-0 text-base font-semibold text-[var(--color-text-primary)]">
-        {listing.price != null ? `${listing.price} ${listing.currency}` : t.search.priceNotListed}
-      </p>
-    </Card>
+
+      <div className="flex shrink-0 flex-col items-end justify-center gap-3">
+        {listing.price != null ? (
+          <p className="text-xl font-bold text-[var(--color-text-primary)]">
+            {listing.price} {listing.currency}
+          </p>
+        ) : (
+          <p className="text-base text-[var(--color-text-secondary)] italic">{t.search.priceNotListed}</p>
+        )}
+
+        <a
+          href={directionsUrl(pharmacy.lat, pharmacy.lng)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`inline-flex items-center gap-2 rounded-[8px] px-4 py-2 text-sm font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-focus)]/40 ${directionsClasses}`}
+        >
+          {t.search.directionsButton}
+          <DirectionsIcon />
+        </a>
+      </div>
+    </div>
   );
 }

@@ -1,5 +1,17 @@
+"use client";
+
+import { ChevronDownIcon, FilterCheckIcon, SortIcon } from "@/components/ui/icons";
+import { useTranslation } from "@/lib/i18n/useTranslation";
+
 export type SortOption = "distance" | "price";
 
+/**
+ * Sort + filter controls row — extracted from Page 7's Figma frame (node
+ * 6:519, "Section - Controls Row"). Sort cycles between the two options on
+ * click rather than a native <select>, to match the exact pill+chevron
+ * look; filter chips toggle independently and show the active teal-tint
+ * treatment with a checkmark when on.
+ */
 export function SortFilterBar({
   sort,
   onSortChange,
@@ -15,31 +27,46 @@ export function SortFilterBar({
   openNowOnly: boolean;
   onOpenNowOnlyChange: (value: boolean) => void;
 }) {
+  const { t } = useTranslation();
+
   return (
-    <div className="flex flex-wrap items-center gap-2">
-      <select
-        value={sort}
-        onChange={(e) => onSortChange(e.target.value as SortOption)}
-        className="rounded-full border border-zinc-300 px-3 py-1.5 text-sm"
-      >
-        <option value="distance">Distance</option>
-        <option value="price">Price: low to high</option>
-      </select>
+    <div className="flex flex-wrap items-center gap-3">
       <button
-        onClick={() => onInStockOnlyChange(!inStockOnly)}
-        className={`rounded-full border px-3 py-1.5 text-sm ${
-          inStockOnly ? "border-blue-500 bg-blue-50 text-blue-700" : "border-zinc-300 text-zinc-600"
-        }`}
+        type="button"
+        onClick={() => onSortChange(sort === "distance" ? "price" : "distance")}
+        className="inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-[13px] py-[7px] text-sm font-medium text-[var(--color-text-primary)] transition-colors hover:bg-[var(--color-canvas)]"
       >
-        In stock
+        <SortIcon className="text-[var(--color-text-secondary)]" />
+        {sort === "distance" ? t.search.sortDistance : t.search.sortPrice}
+        <ChevronDownIcon className="text-[var(--color-text-secondary)]" />
       </button>
+
       <button
-        onClick={() => onOpenNowOnlyChange(!openNowOnly)}
-        className={`rounded-full border px-3 py-1.5 text-sm ${
-          openNowOnly ? "border-blue-500 bg-blue-50 text-blue-700" : "border-zinc-300 text-zinc-600"
+        type="button"
+        aria-pressed={inStockOnly}
+        onClick={() => onInStockOnlyChange(!inStockOnly)}
+        className={`inline-flex items-center gap-2 rounded-full border px-[13px] py-[7px] text-sm font-medium transition-colors ${
+          inStockOnly
+            ? "border-[var(--color-brand)] bg-[var(--color-stock-in-border)] text-[var(--color-text-primary)]"
+            : "border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-primary)] hover:bg-[var(--color-canvas)]"
         }`}
       >
-        Open now
+        {inStockOnly && <FilterCheckIcon />}
+        {t.search.filterInStock}
+      </button>
+
+      <button
+        type="button"
+        aria-pressed={openNowOnly}
+        onClick={() => onOpenNowOnlyChange(!openNowOnly)}
+        className={`inline-flex items-center gap-2 rounded-full border px-[13px] py-[7px] text-sm font-medium transition-colors ${
+          openNowOnly
+            ? "border-[var(--color-brand)] bg-[var(--color-stock-in-border)] text-[var(--color-text-primary)]"
+            : "border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-primary)] hover:bg-[var(--color-canvas)]"
+        }`}
+      >
+        {openNowOnly && <FilterCheckIcon />}
+        {t.search.filterOpenNow}
       </button>
     </div>
   );
