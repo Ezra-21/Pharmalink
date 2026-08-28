@@ -2,13 +2,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BellIcon, PersonIcon, SearchIcon } from "@/components/ui/icons";
+import { BellIcon, SearchIcon } from "@/components/ui/icons";
+import { UserAvatar } from "@/components/ui/UserAvatar";
+import { useAuth } from "@/hooks/useAuth";
 import { useTranslation } from "@/lib/i18n/useTranslation";
 
 const TABS = [
   { key: "search", href: "/home", Icon: SearchIcon },
   { key: "reminders", href: "/reminders", Icon: BellIcon },
-  { key: "profile", href: "/profile", Icon: PersonIcon },
+  { key: "profile", href: "/profile", Icon: null },
 ] as const;
 
 /**
@@ -20,6 +22,7 @@ const TABS = [
  */
 export function PatientBottomNav() {
   const { t } = useTranslation();
+  const { user } = useAuth();
   const pathname = usePathname();
 
   const labels: Record<(typeof TABS)[number]["key"], string> = {
@@ -40,7 +43,7 @@ export function PatientBottomNav() {
               isActive ? "text-[var(--color-brand)]" : "text-[var(--color-text-secondary)]"
             }`}
           >
-            <Icon />
+            {Icon ? <Icon /> : <UserAvatar name={user?.name} avatarUrl={user?.avatarUrl} size={20} />}
             {labels[key]}
           </Link>
         );

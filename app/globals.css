@@ -43,6 +43,12 @@
   /* A muted alt-surface for full-width bands (footer, tinted sections) that
    * need to read as distinct from both the canvas and white cards. */
   --color-surface-muted: #eef0ec;
+
+  /* Read-only input fill (Page 5 — Forgot Password §3): a light muted gray,
+   * distinct from both the white active-input fill and the canvas, so a
+   * "done, can't edit" field (e.g. the email field after a code is sent)
+   * is visually obvious without needing the disabled/opacity treatment. */
+  --color-surface-readonly: #f3f4f0;
 }
 
 @theme inline {
@@ -95,6 +101,7 @@
     --color-stock-out-bg: #2a2f2d;
     --color-stock-out-border: #454b48;
     --color-surface-muted: #202423;
+    --color-surface-readonly: #262b29;
   }
 }
 
@@ -123,6 +130,7 @@
   --color-stock-out-bg: #2a2f2d;
   --color-stock-out-border: #454b48;
   --color-surface-muted: #202423;
+  --color-surface-readonly: #262b29;
 }
 
 body {

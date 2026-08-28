@@ -20,6 +20,7 @@ export function Input({
   showErrorText = true,
   id,
   className = "",
+  readOnly,
   ...props
 }: InputProps) {
   return (
@@ -32,7 +33,10 @@ export function Input({
       <div className="relative">
         <input
           id={id}
-          className={`h-12 w-full rounded-[var(--radius-input)] border bg-[var(--color-surface)] px-[17px] text-base text-[var(--color-text-primary)] outline-none transition-colors placeholder:text-[var(--color-text-placeholder)] focus:ring-2 disabled:cursor-not-allowed disabled:opacity-60 ${
+          readOnly={readOnly}
+          className={`h-12 w-full rounded-[var(--radius-input)] border px-[17px] text-base text-[var(--color-text-primary)] outline-none transition-colors placeholder:text-[var(--color-text-placeholder)] focus:ring-2 disabled:cursor-not-allowed disabled:opacity-60 ${
+            readOnly ? "cursor-default bg-[var(--color-surface-readonly)]" : "bg-[var(--color-surface)]"
+          } ${
             error
               ? "border-[var(--color-error)] focus:border-[var(--color-error)] focus:ring-[var(--color-error)]/20"
               : "border-[var(--color-border)] focus:border-[var(--color-focus)] focus:ring-[var(--color-focus)]/25"

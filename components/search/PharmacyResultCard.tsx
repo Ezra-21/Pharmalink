@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import type { PharmacyListingResult } from "@/lib/types/inventoryListing";
 import { Badge } from "@/components/ui/Badge";
 import { DirectionsIcon, LocationPinIcon } from "@/components/ui/icons";
@@ -19,9 +19,16 @@ function directionsUrl(lat: number, lng: number): string {
  * row, and a right column with price + a real "Directions" link. Cards for
  * pharmacies that are closed or out of stock are visually dimmed, matching
  * the Figma's own opacity treatment on those exact cards.
+ *
+ * The whole card is tappable → Pharmacy Detail (Page 8), per PRD §7.1 step
+ * 4 ("tap a pharmacy result card"), not just the pharmacy's name — so
+ * there's no small/ambiguous target to hunt for. "Get directions" is a
+ * real nested action (opens Google Maps in a new tab) and stops the click
+ * from also bubbling into the card's own navigation.
  */
 export function PharmacyResultCard({ listing }: { listing: PharmacyListingResult }) {
   const { t } = useTranslation();
+  const router = useRouter();
   const { pharmacy } = listing;
 
   const isFullyAvailable = listing.stockStatus === "in_stock" && pharmacy.isOpenNow;
@@ -34,15 +41,27 @@ export function PharmacyResultCard({ listing }: { listing: PharmacyListingResult
       ? "border border-[var(--color-border)] bg-[var(--color-canvas)] text-[var(--color-text-secondary)]"
       : "border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-primary)] hover:bg-[var(--color-canvas)]";
 
+  const detailHref = `/pharmacy/${pharmacy.id}?medicineId=${listing.medicineId}`;
+
+  function goToDetail() {
+    router.push(detailHref);
+  }
+
   return (
     <div
-      className={`flex items-start justify-between gap-4 rounded-[12px] border border-[var(--color-border)] bg-[var(--color-surface)] px-6 py-5 transition-opacity sm:px-[41px] sm:py-[21px] ${cardOpacity}`}
+      role="link"
+      tabIndex={0}
+      onClick={goToDetail}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          goToDetail();
+        }
+      }}
+      className={`flex cursor-pointer items-start justify-between gap-4 rounded-[12px] border border-[var(--color-border)] bg-[var(--color-surface)] px-6 py-5 transition-colors hover:border-[var(--color-brand)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-focus)]/40 sm:px-[41px] sm:py-[21px] ${cardOpacity}`}
     >
-      <Link
-        href={`/pharmacy/${pharmacy.id}?medicineId=${listing.medicineId}`}
-        className="flex flex-col gap-1 focus:outline-none focus-visible:underline"
-      >
-        <p className="text-base font-semibold text-[var(--color-text-primary)] hover:underline">{pharmacy.name}</p>
+      <div className="flex flex-col gap-1">
+        <p className="text-base font-semibold text-[var(--color-text-primary)]">{pharmacy.name}</p>
 
         <div className="flex items-center gap-2 text-[13px]">
           {pharmacy.distanceKm != null ? (
@@ -65,7 +84,7 @@ export function PharmacyResultCard({ listing }: { listing: PharmacyListingResult
             {t.search.updated} {formatUpdatedAt(listing.updatedAt)}
           </span>
         </div>
-      </Link>
+      </div>
 
       <div className="flex shrink-0 flex-col items-end justify-center gap-3">
         {listing.price != null ? (
@@ -80,6 +99,7 @@ export function PharmacyResultCard({ listing }: { listing: PharmacyListingResult
           href={directionsUrl(pharmacy.lat, pharmacy.lng)}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={(e) => e.stopPropagation()}
           className={`inline-flex items-center gap-2 rounded-[8px] px-4 py-2 text-sm font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-focus)]/40 ${directionsClasses}`}
         >
           {t.search.directionsButton}

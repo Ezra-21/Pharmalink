@@ -9,7 +9,6 @@ import { getMedicineListings, searchMedicines } from "@/lib/api/medicines";
 import { PharmacyResultCard } from "@/components/search/PharmacyResultCard";
 import { SearchBar } from "@/components/search/SearchBar";
 import { SortFilterBar, type SortOption } from "@/components/search/SortFilterBar";
-import { ListMapToggle, type ViewMode } from "@/components/search/ListMapToggle";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ArrowLeftIcon, InfoCircleIcon, PrescriptionIcon } from "@/components/ui/icons";
@@ -39,7 +38,6 @@ export function SearchResultsView({ query }: { query: string }) {
   const [sort, setSort] = useState<SortOption>("distance");
   const [inStockOnly, setInStockOnly] = useState(false);
   const [openNowOnly, setOpenNowOnly] = useState(false);
-  const [viewMode, setViewMode] = useState<ViewMode>("list");
 
   // Keep the editable field in sync if the URL's query changes from outside
   // this component (e.g. navigating here again with a new chip). Adjusted
@@ -193,7 +191,7 @@ export function SearchResultsView({ query }: { query: string }) {
 
       {status === "success" && (
         <>
-          <div className="flex items-center justify-between gap-3 border-b border-[var(--color-border)] pb-4">
+          <div className="border-b border-[var(--color-border)] pb-4">
             <SortFilterBar
               sort={sort}
               onSortChange={setSort}
@@ -202,12 +200,9 @@ export function SearchResultsView({ query }: { query: string }) {
               openNowOnly={openNowOnly}
               onOpenNowOnlyChange={setOpenNowOnly}
             />
-            <ListMapToggle mode={viewMode} onChange={setViewMode} />
           </div>
 
-          {viewMode === "map" ? (
-            <EmptyState title={t.search.mapView} description="Map view isn't available yet — try List instead." />
-          ) : visibleResults.length === 0 ? (
+          {visibleResults.length === 0 ? (
             <EmptyState
               title={t.search.noFilteredResults}
               action={
@@ -231,7 +226,7 @@ export function SearchResultsView({ query }: { query: string }) {
             </div>
           )}
 
-          {hasActiveFilters && visibleResults.length > 0 && viewMode === "list" && (
+          {hasActiveFilters && visibleResults.length > 0 && (
             <button
               type="button"
               onClick={() => {

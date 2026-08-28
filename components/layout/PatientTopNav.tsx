@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LanguagePill } from "@/components/ui/LanguagePill";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
-import { PersonIcon } from "@/components/ui/icons";
+import { UserAvatar } from "@/components/ui/UserAvatar";
 import { useAuth } from "@/hooks/useAuth";
 import { useTranslation } from "@/lib/i18n/useTranslation";
 
@@ -67,18 +67,9 @@ export function PatientTopNav() {
         <div className="flex items-center justify-end gap-3">
           <ThemeToggle />
           <LanguagePill />
-          <span
-            className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full border border-[var(--color-border)] bg-[var(--color-canvas)] text-[var(--color-text-secondary)]"
-            aria-hidden="true"
-          >
-            {user?.name ? (
-              <span className="text-xs font-semibold text-[var(--color-text-primary)]">
-                {user.name.charAt(0).toUpperCase()}
-              </span>
-            ) : (
-              <PersonIcon />
-            )}
-          </span>
+          <Link href="/profile" aria-label={t.nav.profile}>
+            <UserAvatar name={user?.name} avatarUrl={user?.avatarUrl} size={32} />
+          </Link>
         </div>
       </div>
     </header>

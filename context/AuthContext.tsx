@@ -8,6 +8,9 @@ import {
   logout as logoutRequest,
   signupPatient as signupPatientRequest,
   signupPharmacyStaff as signupPharmacyStaffRequest,
+  updateProfile as updateProfileRequest,
+  changePassword as changePasswordRequest,
+  updateProfilePhoto as updateProfilePhotoRequest,
 } from "@/lib/api/auth";
 import type { LoginPayload, SignupPatientPayload, SignupPharmacyStaffPayload } from "@/lib/api/auth";
 
@@ -19,6 +22,12 @@ export interface AuthContextValue {
   signupPharmacyStaff: (payload: SignupPharmacyStaffPayload) => Promise<User>;
   logout: () => Promise<void>;
   refresh: () => Promise<void>;
+  /** Page 11 — Profile: editable subset of the current user's fields. */
+  updateProfile: (fields: Partial<Pick<User, "name" | "phone" | "email" | "preferredLanguage">>) => Promise<User>;
+  /** Page 11 — Profile: authenticated password change, distinct from Page 5's OTP reset. */
+  changePassword: (payload: { currentPassword: string; newPassword: string }) => Promise<void>;
+  /** Page 11 — Profile: single-image avatar upload; updates `user.avatarUrl` on success. */
+  updateProfilePhoto: (file: File) => Promise<User>;
 }
 
 export const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -70,9 +79,47 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   }, []);
 
+  const updateProfile = useCallback(
+    async (fields: Partial<Pick<User, "name" | "phone" | "email" | "preferredLanguage">>) => {
+      const updated = await updateProfileRequest(fields);
+      setUser(updated);
+      return updated;
+    },
+    []
+  );
+
+  const changePassword = useCallback(
+    async (payload: { currentPassword: string; newPassword: string }) => {
+      await changePasswordRequest(payload);
+    },
+    []
+  );
+
+  const updateProfilePhoto = useCallback(
+    async (file: File) => {
+      const { avatarUrl } = await updateProfilePhotoRequest(file);
+      if (!user) throw new Error("Not signed in.");
+      const updated: User = { ...user, avatarUrl };
+      setUser(updated);
+      return updated;
+    },
+    [user]
+  );
+
   return (
     <AuthContext.Provider
-      value={{ user, isLoading, login, signupPatient, signupPharmacyStaff, logout, refresh }}
+      value={{
+        user,
+        isLoading,
+        login,
+        signupPatient,
+        signupPharmacyStaff,
+        logout,
+        refresh,
+        updateProfile,
+        changePassword,
+        updateProfilePhoto,
+      }}
     >
       {children}
     </AuthContext.Provider>

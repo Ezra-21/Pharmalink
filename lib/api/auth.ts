@@ -1,4 +1,4 @@
-import { apiRequest } from "@/lib/api/client";
+import { apiRequest, ApiError } from "@/lib/api/client";
 import type { User, UserRole } from "@/lib/types/user";
 
 export interface LoginPayload {
@@ -45,6 +45,10 @@ const USE_MOCKS = true;
 const SESSION_COOKIE = "pharmalink_session";
 const ROLE_COOKIE = "pharmalink_role";
 const MOCK_USER_STORAGE_KEY = "pharmalink_mock_user";
+/** Mock-only stand-in for a server-verified password (Page 11 §11) — unset
+ * until the first successful changePassword() call, since mock login never
+ * checks a password. Never a real secret; local-dev convenience only. */
+const MOCK_PASSWORD_STORAGE_KEY = "pharmalink_mock_password";
 
 function setMockSession(user: User) {
   // Plain, non-HttpOnly cookies — fine for a local mock; the real backend
@@ -59,6 +63,10 @@ function clearMockSession() {
   document.cookie = `${SESSION_COOKIE}=; path=/; max-age=0`;
   document.cookie = `${ROLE_COOKIE}=; path=/; max-age=0`;
   window.localStorage.removeItem(MOCK_USER_STORAGE_KEY);
+}
+
+function persistMockUser(user: User) {
+  window.localStorage.setItem(MOCK_USER_STORAGE_KEY, JSON.stringify(user));
 }
 
 function readMockUser(): User | null {
@@ -132,9 +140,39 @@ export async function signupPharmacyStaff(payload: SignupPharmacyStaffPayload): 
   return apiRequest<User>("/auth/signup/pharmacy-staff", { method: "POST", body: formData });
 }
 
-export async function requestPasswordReset(identifier: string): Promise<void> {
+/** Step 1 of Page 5's reset flow (§11): always resolves with a neutral
+ * success regardless of whether the email exists (§9.3) — mock or real. */
+export async function requestPasswordReset(email: string): Promise<void> {
   if (USE_MOCKS) return;
-  return apiRequest<void>("/auth/forgot-password", { method: "POST", body: { identifier } });
+  return apiRequest<void>("/auth/forgot-password", { method: "POST", body: { email } });
+}
+
+/**
+ * Step 2 (Page 5 §5.2, §11). Mock mode accepts any non-empty code as valid
+ * (there's no real code ever sent) and returns a fake short-lived token —
+ * that token, not the raw code, is what carries the user from Screen A to
+ * Screen B (as a query param), so a stale/expired token on Screen B can be
+ * told apart from "never verified" without re-checking the code itself.
+ */
+export async function verifyResetCode(email: string, code: string): Promise<{ resetToken: string }> {
+  if (USE_MOCKS) {
+    if (!code.trim()) throw new ApiError("That code is incorrect or expired.", 400);
+    return { resetToken: `mock-reset-${Date.now()}` };
+  }
+  return apiRequest<{ resetToken: string }>("/auth/verify-reset-code", { method: "POST", body: { email, code } });
+}
+
+/** Step 3 (Page 5 §5.4, §11) — verifies the reset token server-side and
+ * sets the new password. Mock mode also updates the same mock-password
+ * store Page 11's changePassword() uses, so a reset actually "sticks" for
+ * a later authenticated password change to verify against. */
+export async function resetPassword(resetToken: string, newPassword: string): Promise<void> {
+  if (USE_MOCKS) {
+    if (!resetToken) throw new ApiError("This reset link has expired.", 400);
+    window.localStorage.setItem(MOCK_PASSWORD_STORAGE_KEY, newPassword);
+    return;
+  }
+  return apiRequest<void>("/auth/reset-password", { method: "POST", body: { resetToken, newPassword } });
 }
 
 export async function getCurrentUser(): Promise<User | null> {
@@ -154,4 +192,66 @@ export async function logout(): Promise<void> {
     return;
   }
   return apiRequest<void>("/auth/logout", { method: "POST" });
+}
+
+/**
+ * NEW (Page 11 — Profile §11). Updates the subset of User fields Profile's
+ * "Account details" card can edit. Real endpoint is a best-guess PATCH —
+ * unconfirmed against the Go backend, same caveat as every other function
+ * in this file.
+ */
+export async function updateProfile(
+  fields: Partial<Pick<User, "name" | "phone" | "email" | "preferredLanguage">>
+): Promise<User> {
+  if (USE_MOCKS) {
+    const current = readMockUser();
+    if (!current) throw new ApiError("Not signed in.", 401);
+    const updated: User = { ...current, ...fields };
+    persistMockUser(updated);
+    return updated;
+  }
+  return apiRequest<User>("/auth/me", { method: "PATCH", body: fields });
+}
+
+/**
+ * NEW (Page 11 §11, §5.6). Verifies the current password server-side before
+ * setting the new one. Mock mode verifies against a locally-stored mock
+ * password if one has ever been set (via a prior successful call here);
+ * otherwise any non-empty current password is accepted, since mock login
+ * never establishes a real password to check against.
+ */
+export async function changePassword({
+  currentPassword,
+  newPassword,
+}: {
+  currentPassword: string;
+  newPassword: string;
+}): Promise<void> {
+  if (USE_MOCKS) {
+    const storedPassword = window.localStorage.getItem(MOCK_PASSWORD_STORAGE_KEY);
+    if (storedPassword && currentPassword !== storedPassword) {
+      throw new ApiError("Your current password is incorrect.", 401);
+    }
+    window.localStorage.setItem(MOCK_PASSWORD_STORAGE_KEY, newPassword);
+    return;
+  }
+  return apiRequest<void>("/auth/change-password", {
+    method: "POST",
+    body: { currentPassword, newPassword },
+  });
+}
+
+/**
+ * NEW (Page 11 §5.4, §11). Single-image profile photo upload. Mock mode
+ * returns a local object URL — no persistence, but enough to exercise the
+ * full preview/upload/success UI flow with no backend running. Real mode
+ * sends FormData (apiRequest already detects it and skips JSON-encoding).
+ */
+export async function updateProfilePhoto(file: File): Promise<{ avatarUrl: string }> {
+  if (USE_MOCKS) {
+    return { avatarUrl: URL.createObjectURL(file) };
+  }
+  const formData = new FormData();
+  formData.append("photo", file);
+  return apiRequest<{ avatarUrl: string }>("/auth/me/photo", { method: "POST", body: formData });
 }

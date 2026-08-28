@@ -18,9 +18,11 @@ const AUTH_ROUTES = ["/login", "/signup", "/forgot-password"];
  * Only truly personal routes require a session. Search and the pharmacy/
  * medicine detail pages are intentionally public — the landing page's hero
  * search and Pages 6/7's "also serves anonymous search" requirement
- * (prd.md §7.1) both depend on browsing working with no account.
+ * (prd.md §7.1) both depend on browsing working with no account. `/profile`
+ * added with Page 11 — it reads/writes the signed-in user's own account, so
+ * (unlike Search) it has no meaningful anonymous state to show.
  */
-const PATIENT_ROUTES = ["/home"];
+const PATIENT_ROUTES = ["/home", "/profile"];
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
