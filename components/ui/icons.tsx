@@ -344,6 +344,47 @@ export function CameraIcon({ className }: { className?: string }) {
 }
 
 /**
+ * Icons below are extracted from the Page 12 — Reminders Figma frame (node
+ * 48:1361, same file as above).
+ */
+
+/** Filled bell — the "Push" channel pill icon. Distinct, fill-based asset
+ * from the hand-authored stroke BellIcon used on the mobile nav. */
+export function BellFilledIcon({ className }: { className?: string }) {
+  return (
+    <svg width="9" height="12" viewBox="0 0 9.33333 11.6667" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" className={className}>
+      <path
+        d="M0 9.91667V8.75H1.16667V4.66667C1.16667 3.85972 1.40972 3.14271 1.89583 2.51562C2.38194 1.88854 3.01389 1.47778 3.79167 1.28333V0.875C3.79167 0.631944 3.87674 0.425347 4.04688 0.255208C4.21701 0.0850694 4.42361 0 4.66667 0C4.90972 0 5.11632 0.0850694 5.28646 0.255208C5.4566 0.425347 5.54167 0.631944 5.54167 0.875V1.28333C6.31944 1.47778 6.95139 1.88854 7.4375 2.51562C7.92361 3.14271 8.16667 3.85972 8.16667 4.66667V8.75H9.33333V9.91667H0V9.91667M4.66667 5.54167V5.54167V5.54167V5.54167V5.54167V5.54167V5.54167V5.54167V5.54167M4.66667 11.6667C4.34583 11.6667 4.07118 11.5524 3.84271 11.324C3.61424 11.0955 3.5 10.8208 3.5 10.5H5.83333C5.83333 10.8208 5.7191 11.0955 5.49062 11.324C5.26215 11.5524 4.9875 11.6667 4.66667 11.6667V11.6667M2.33333 8.75H7V4.66667C7 4.025 6.77153 3.47569 6.31458 3.01875C5.85764 2.56181 5.30833 2.33333 4.66667 2.33333C4.025 2.33333 3.47569 2.56181 3.01875 3.01875C2.56181 3.47569 2.33333 4.025 2.33333 4.66667V8.75V8.75"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
+/** Phone/device outline — the "SMS" channel pill icon. */
+export function SmsIcon({ className }: { className?: string }) {
+  return (
+    <svg width="9" height="13" viewBox="0 0 8.75 12.8333" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" className={className}>
+      <path
+        d="M1.16667 12.8333C0.845833 12.8333 0.571181 12.7191 0.342708 12.4906C0.114236 12.2622 0 11.9875 0 11.6667V1.16667C0 0.845833 0.114236 0.571181 0.342708 0.342708C0.571181 0.114236 0.845833 0 1.16667 0H7C7.32083 0 7.59549 0.114236 7.82396 0.342708C8.05243 0.571181 8.16667 0.845833 8.16667 1.16667V2.975C8.34167 3.04306 8.48264 3.15 8.58958 3.29583C8.69653 3.44167 8.75 3.60694 8.75 3.79167V4.95833C8.75 5.14306 8.69653 5.30833 8.58958 5.45417C8.48264 5.6 8.34167 5.70694 8.16667 5.775V11.6667C8.16667 11.9875 8.05243 12.2622 7.82396 12.4906C7.59549 12.7191 7.32083 12.8333 7 12.8333H1.16667V12.8333M1.16667 11.6667H7V1.16667H1.16667V11.6667V11.6667M4.08333 2.91667C4.24861 2.91667 4.38715 2.86076 4.49896 2.74896C4.61076 2.63715 4.66667 2.49861 4.66667 2.33333C4.66667 2.16806 4.61076 2.02951 4.49896 1.91771C4.38715 1.8059 4.24861 1.75 4.08333 1.75C3.91806 1.75 3.77951 1.8059 3.66771 1.91771C3.5559 2.02951 3.5 2.16806 3.5 2.33333C3.5 2.49861 3.5559 2.63715 3.66771 2.74896C3.77951 2.86076 3.91806 2.91667 4.08333 2.91667V2.91667"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
+/** Small clock face — used on the "Snooze" row-action button (a distinct,
+ * simpler shape from RecentClockIcon so the two don't read identically). */
+export function SnoozeClockIcon({ className }: { className?: string }) {
+  return (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className={className}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 7.5V12l3 2" />
+    </svg>
+  );
+}
+
+/**
  * Icons below are extracted directly from the Page 10 — Landing Page Figma
  * frames (nodes 17:975 "Main" and 17:1083 "Footer", same file as above).
  * Fills are parameterized to `currentColor` so they inherit the surrounding

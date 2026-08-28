@@ -285,6 +285,54 @@ export const am: Dictionary = {
     photoFailure: "ፎቶዎን ማዘመን አልተቻለም። እባክዎ እንደገና ይሞክሩ።",
     offlineBanner: "ከመስመር ውጭ ነዎት። መገለጫዎን ለማዘመን ኢንተርኔት ያገናኙ።",
   },
+  // NOTE: Page 12 (Reminders) copy below is drafted directly from that
+  // page's PRD §10 Amharic table — still 🔴 not yet reviewed by a native
+  // speaker (per PRD §9.2). Numeric/date parts are split into prefix/suffix
+  // pairs around where {N}/{date} sat in the PRD's draft phrase, since the
+  // i18n layer has no string-interpolation support (same precedent as
+  // Page 5's resend countdown).
+  reminders: {
+    addReminderButton: "ማስታወሻ ጨምር",
+    emptyHeading: "ምንም ማስታወሻ የለም ገና",
+    emptyBody: "የሚወስዱትን መድኃኒት ሳያጡት ለማስታወስ ማስታወሻ ያዘጋጁ።",
+    dueToday: "ቀኑ ዛሬ ነው",
+    dueInDaysPrefix: "በ",
+    dueInDaysSuffix: " ቀናት ውስጥ",
+    overdueByPrefix: "በ",
+    overdueBySuffix: " ቀናት ዘግይቷል",
+    oneTimeOnPrefix: "በ",
+    oneTimeOnSuffix: " አንድ ጊዜ",
+    everyDaysPrefix: "በየ",
+    everyDaysSuffix: " ቀኑ",
+    nextDueToday: "ቀጣይ ጊዜ ዛሬ",
+    nextDueInDaysPrefix: "ቀጣይ ጊዜ በ",
+    nextDueInDaysSuffix: " ቀናት",
+    channelPush: "ግፋ",
+    channelSms: "SMS",
+    snoozeAction: "አስተላልፍ",
+    snoozedToast: "ለ1 ቀን ተላልፏል።",
+    cancelledToast: "ማስታወሻው ተሰርዟል።",
+    dialogHeadingAdd: "ማስታወሻ ጨምር",
+    dialogHeadingEdit: "ማስታወሻ አርትዕ",
+    medicineLabel: "መድኃኒት",
+    medicinePlaceholder: "መድኃኒት ይፈልጉ",
+    cadenceLabel: "ምን ያህል ጊዜ?",
+    cadenceOnce: "አንድ ጊዜ",
+    cadenceOnceHint: "አንድ የግዢ ቀን ያዘጋጁ።",
+    cadenceRepeating: "በየጊዜው",
+    cadenceRepeatingHint: "በየጥቂት ቀኑ ያስታውሱኝ።",
+    refillDateLabel: "የግዢ ቀን",
+    repeatEveryPrefix: "በየ",
+    repeatEverySuffix: "ቀኑ",
+    channelHeading: "እንዴት ላስታውስዎ?",
+    channelPushOption: "የግፋ ማስታወቂያ",
+    channelSmsOption: "የSMS መልእክት",
+    saveReminderButton: "ማስታወሻ አስቀምጥ",
+    validationMedicine: "እባክዎ መድኃኒት ይምረጡ።",
+    validationDate: "እባክዎ የግዢ ቀን ይምረጡ።",
+    validationInterval: "በማስታወሻዎች መካከል ያሉ ቀናትን ያስገቡ።",
+    offlineBanner: "ከመስመር ውጭ ነዎት። ማስታወሻ ለመጨመር ወይም ለመቀየር ኢንተርኔት ያገናኙ።",
+  },
   // NOTE: landing page copy below is draft machine-assisted translation per
   // PRD §9.2 — not yet reviewed by a native Amharic speaker. TODO before ship.
   landing: {

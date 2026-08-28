@@ -49,6 +49,19 @@
    * "done, can't edit" field (e.g. the email field after a code is sent)
    * is visually obvious without needing the disabled/opacity treatment. */
   --color-surface-readonly: #f3f4f0;
+
+  /* Two small accent hues added for Page 12 (Reminders) — deliberately new,
+   * not a reuse of brand/error/amber, so the row-action buttons and the two
+   * channel pills read as distinct at a glance rather than everything being
+   * teal or gray. Neither is used for anything status/semantic elsewhere
+   * (amber stays reserved for overdue/low-stock, red stays reserved for
+   * errors), so this doesn't dilute either of those meanings. */
+  --color-accent-info: #3e6fa8; /* SMS channel pill */
+  --color-accent-info-bg: #e8f0fa;
+  --color-accent-info-border: #c7d9ef;
+  --color-accent-violet: #6b4fa0; /* Snooze action button */
+  --color-accent-violet-bg: #efeaf7;
+  --color-accent-violet-border: #d9cceb;
 }
 
 @theme inline {
@@ -102,6 +115,12 @@
     --color-stock-out-border: #454b48;
     --color-surface-muted: #202423;
     --color-surface-readonly: #262b29;
+    --color-accent-info: #7ba9de;
+    --color-accent-info-bg: #1b2a3d;
+    --color-accent-info-border: #2c4159;
+    --color-accent-violet: #b79ee0;
+    --color-accent-violet-bg: #2a2138;
+    --color-accent-violet-border: #3d3050;
   }
 }
 
@@ -131,6 +150,12 @@
   --color-stock-out-border: #454b48;
   --color-surface-muted: #202423;
   --color-surface-readonly: #262b29;
+  --color-accent-info: #7ba9de;
+  --color-accent-info-bg: #1b2a3d;
+  --color-accent-info-border: #2c4159;
+  --color-accent-violet: #b79ee0;
+  --color-accent-violet-bg: #2a2138;
+  --color-accent-violet-border: #3d3050;
 }
 
 body {

@@ -20,9 +20,11 @@ const AUTH_ROUTES = ["/login", "/signup", "/forgot-password"];
  * search and Pages 6/7's "also serves anonymous search" requirement
  * (prd.md §7.1) both depend on browsing working with no account. `/profile`
  * added with Page 11 — it reads/writes the signed-in user's own account, so
- * (unlike Search) it has no meaningful anonymous state to show.
+ * (unlike Search) it has no meaningful anonymous state to show. `/reminders`
+ * added with Page 12 — same reasoning as `/profile`, personal data with no
+ * anonymous state.
  */
-const PATIENT_ROUTES = ["/home", "/profile"];
+const PATIENT_ROUTES = ["/home", "/profile", "/reminders"];
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;

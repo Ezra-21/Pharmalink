@@ -1,8 +1,10 @@
+import { RemindersView } from "@/components/reminders/RemindersView";
+
+/**
+ * Page 12 — Reminders. Implemented per "Page 12 — Reminders/PRD.md" against
+ * Figma node 48:1361 for the row/list layout. Lives under (patient), so
+ * PatientTopNav / PatientBottomNav / PublicFooter already wrap it.
+ */
 export default function RemindersPage() {
-  return (
-    <main>
-      <h1>Reminders</h1>
-      {/* TODO: implement the Refill Reminders page per the PRD (§6.5) once its Figma design is available */}
-    </main>
-  );
+  return <RemindersView />;
 }
