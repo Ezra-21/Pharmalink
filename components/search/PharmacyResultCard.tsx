@@ -1,23 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import type { PharmacyListingResult } from "@/lib/types/inventoryListing";
 import { Badge } from "@/components/ui/Badge";
 import { DirectionsIcon, LocationPinIcon } from "@/components/ui/icons";
 import { useTranslation } from "@/lib/i18n/useTranslation";
-
-/**
- * Relative-time suffixes ("h ago" / "d ago") stay in English for now — the
- * lightweight dictionary in lib/i18n has no string-interpolation support
- * yet, so a fully localized "N hours ago" would need that feature added
- * first rather than being faked here.
- */
-function formatUpdatedAt(iso: string): string {
-  const diffMs = Date.now() - new Date(iso).getTime();
-  const hours = Math.floor(diffMs / (1000 * 60 * 60));
-  if (hours < 1) return "just now";
-  if (hours < 24) return `${hours}h ago`;
-  return `${Math.floor(hours / 24)}d ago`;
-}
+import { formatUpdatedAt } from "@/lib/utils/time";
 
 /** Real Google Maps deep link — opens the phone's default maps app per
  * main prd.md §6.2, rather than a placeholder/dead "Directions" button. */
@@ -50,8 +38,11 @@ export function PharmacyResultCard({ listing }: { listing: PharmacyListingResult
     <div
       className={`flex items-start justify-between gap-4 rounded-[12px] border border-[var(--color-border)] bg-[var(--color-surface)] px-6 py-5 transition-opacity sm:px-[41px] sm:py-[21px] ${cardOpacity}`}
     >
-      <div className="flex flex-col gap-1">
-        <p className="text-base font-semibold text-[var(--color-text-primary)]">{pharmacy.name}</p>
+      <Link
+        href={`/pharmacy/${pharmacy.id}?medicineId=${listing.medicineId}`}
+        className="flex flex-col gap-1 focus:outline-none focus-visible:underline"
+      >
+        <p className="text-base font-semibold text-[var(--color-text-primary)] hover:underline">{pharmacy.name}</p>
 
         <div className="flex items-center gap-2 text-[13px]">
           {pharmacy.distanceKm != null ? (
@@ -74,7 +65,7 @@ export function PharmacyResultCard({ listing }: { listing: PharmacyListingResult
             {t.search.updated} {formatUpdatedAt(listing.updatedAt)}
           </span>
         </div>
-      </div>
+      </Link>
 
       <div className="flex shrink-0 flex-col items-end justify-center gap-3">
         {listing.price != null ? (

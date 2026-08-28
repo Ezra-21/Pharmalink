@@ -172,6 +172,33 @@ export const am: Dictionary = {
     logIn: "ይግቡ",
     helperText: "የአስተዳዳሪ መለያዎች በፋርማሊንክ ቡድን ይፈጠራሉ።",
   },
+  // NOTE: Page 8 (Pharmacy Detail) copy below is drafted directly from that
+  // page's PRD §10 Amharic table — still 🔴 not yet reviewed by a native
+  // speaker (per PRD §9.2).
+  pharmacyDetail: {
+    backToResults: "ወደ ውጤቶች ተመለስ",
+    verifiedPharmacy: "የተረጋገጠ ፋርማሲ",
+    closes: "ይዘጋል",
+    opens: "ይከፈታል",
+    kmAway: "ኪ.ሜ ርቀት",
+    addressField: "አድራሻ",
+    phoneField: "ስልክ",
+    hoursField: "ሰዓታት",
+    availableHeading: "በዚህ ፋርማሲ ውስጥ ይገኛል",
+    priceLabel: "ዋጋ",
+    viewDrugInfo: "የመድኃኒት መረጃ ይመልከቱ",
+    getDirections: "አቅጣጫ አግኝ",
+    callPharmacy: "ፋርማሲ ደውል",
+    contactHours: "መገኛ እና ሰዓታት",
+    today: "ዛሬ",
+    seeAllHours: "ሁሉንም ሰዓታት ይመልከቱ",
+    hideHours: "ሰዓታት ደብቅ",
+    openInMaps: "በካርታ ክፈት",
+    weekdaysHours: "ሰኞ–ቅዳሜ 8:00 ኤኤም – 9:00 ፒኤም",
+    sundayHours: "እሁድ 9:00 ኤኤም – 6:00 ፒኤም",
+    notFoundTitle: "ፋርማሲ አልተገኘም",
+    notFoundBody: "ይህ ፋርማሲ ተወግዶ ሊሆን ይችላል። ሌላ ፍለጋ ይሞክሩ።",
+  },
   // NOTE: landing page copy below is draft machine-assisted translation per
   // PRD §9.2 — not yet reviewed by a native Amharic speaker. TODO before ship.
   landing: {

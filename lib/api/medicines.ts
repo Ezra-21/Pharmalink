@@ -28,6 +28,34 @@ export async function getMedicineListings(medicineId: string): Promise<PharmacyL
   return apiRequest<PharmacyListingResult[]>(`/medicines/${medicineId}/listings`);
 }
 
+export async function getMedicineById(id: string): Promise<Medicine | null> {
+  if (USE_MOCKS) {
+    return mockMedicines.find((m) => m.id === id) ?? null;
+  }
+  try {
+    return await apiRequest<Medicine>(`/medicines/${id}`);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Resolves the "this medicine here" context card on Pharmacy Detail (Page
+ * 8): the searched medicine's listing at one specific pharmacy, carried
+ * over from Search Results (Page 7) via the `medicineId` query param. If
+ * either side of the join is missing (e.g. stale/removed listing), returns
+ * null so the caller can hide the card per PRD §6 "No medicine context".
+ */
+export async function getPharmacyMedicineContext(
+  pharmacyId: string,
+  medicineId: string
+): Promise<{ listing: PharmacyListingResult; medicine: Medicine } | null> {
+  const [listings, medicine] = await Promise.all([getMedicineListings(medicineId), getMedicineById(medicineId)]);
+  const listing = listings.find((l) => l.pharmacyId === pharmacyId) ?? null;
+  if (!listing || !medicine) return null;
+  return { listing, medicine };
+}
+
 export async function getDrugInfo(medicineId: string): Promise<DrugInfo | null> {
   if (USE_MOCKS) {
     return null; // stub: represents "not yet reviewed" state per Page 9
