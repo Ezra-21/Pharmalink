@@ -3,13 +3,16 @@ import type { ReactNode } from "react";
 type CalloutVariant = "warning" | "error";
 
 const variantClasses: Record<CalloutVariant, { border: string; bg: string; title: string; text: string }> = {
-  // Calm amber warning — used for drug-info warnings/interactions (Page 9).
-  // Deliberately not red: medical warnings shouldn't read as errors.
+  // Calm amber warning — used for drug-info warnings/interactions (Page 9)
+  // and the pharmacy pending-review message. Deliberately not red: medical
+  // warnings shouldn't read as errors. Reuses the same amber tokens as the
+  // "Low stock" badge (--color-stock-low*) rather than raw Tailwind
+  // amber-* literals, so this stays legible under dark mode too.
   warning: {
-    border: "border-amber-200",
-    bg: "bg-amber-50",
-    title: "text-amber-900",
-    text: "text-amber-800",
+    border: "border-[var(--color-stock-low-border)]",
+    bg: "bg-[var(--color-stock-low-bg)]",
+    title: "text-[var(--color-stock-low)]",
+    text: "text-[var(--color-stock-low)]",
   },
   // Form/auth errors (Page 1 Login) — calm styling using the error tokens,
   // not an alarming saturated red.

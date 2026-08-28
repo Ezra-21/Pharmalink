@@ -4,6 +4,7 @@ import type { PharmacyListingResult } from "@/lib/types/inventoryListing";
 import type { DrugInfo } from "@/lib/types/drugInfo";
 import { mockMedicines } from "@/lib/mocks/medicines.mock";
 import { getMockSearchResults } from "@/lib/mocks/searchResults.mock";
+import { mockDrugInfo } from "@/lib/mocks/drugInfo.mock";
 
 /** Toggle this once the Go medicines/search endpoints are live. */
 const USE_MOCKS = true;
@@ -56,9 +57,15 @@ export async function getPharmacyMedicineContext(
   return { listing, medicine };
 }
 
+/**
+ * Returns the raw entry (whatever its reviewStatus) — the caller is
+ * responsible for the §6.4 gating (only render medical content when
+ * reviewStatus === "approved"); this function doesn't hide "pending"
+ * entries itself, so a future admin/reviewer view could still read them.
+ */
 export async function getDrugInfo(medicineId: string): Promise<DrugInfo | null> {
   if (USE_MOCKS) {
-    return null; // stub: represents "not yet reviewed" state per Page 9
+    return mockDrugInfo.find((d) => d.medicineId === medicineId) ?? null;
   }
   try {
     return await apiRequest<DrugInfo>(`/medicines/${medicineId}/drug-info`);
